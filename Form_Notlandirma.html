@@ -1,0 +1,215 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>İstinye Not Hesaplama</title>
+
+    <!--Bootstrap/CSS-->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css"
+    rel="stylesheet" 
+    integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" 
+    crossorigin="anonymous">
+
+</head>
+
+<body>
+
+    <nav class="navbar navbar-light" style="background-color: white;">
+        <div class="container-fluid" style="background-color: white;">
+            <ul class="list-inline">
+                <li class="list-inline-item">
+                    <span style="color: rgb(244, 98, 98);" class="navbar-brand mb-0 h1">
+                        Istinye Universitesi
+                    </span>
+                </li>
+                <li class="list-inline-item">Ogrenci Notlandirma Sistemi</li>
+            </ul>
+        </div>
+    </nav>
+
+    <div id="alert"></div>
+
+    <br>
+    <div class="container">
+
+        <div id="alert"></div>
+
+        <div class="row">
+            <div class="col-sm-6">
+                <h5>Not ve Bilgileri Giriniz:</h5>
+                <br>
+                <form id="userform">
+                    <div>
+                        <label for="username">Ogrenci Adi Giriniz:</label>
+                        <input style="width: 25rem;" class="form-control mt-2" type="text" name="username" id="username">
+                    </div>
+        
+                    <div class="mt-4">
+                        <label for="username">First Grade:</label>
+                        <input style="width: 25rem;" class="form-control mt-2" type="number" name="username" id="grade">
+                    </div>
+
+                    <div class="mt-4">
+                        <label for="username">Second Grade:</label>
+                        <input style="width: 25rem;" class="form-control mt-2" type="number" name="username" id="grade2">
+                    </div>
+
+                    <div class="mt-4">
+                        <label for="username">Third Grade:</label>
+                        <input style="width: 25rem;" class="form-control mt-2" type="number" name="username" id="grade3">
+                    </div>
+        
+                    <div class="mt-4">
+                        <button type="submit" class="btn btn-success">Kaydet</button>
+                        <button style="margin-left: 0.5rem;" type="reset" class="btn btn-danger">Temizle</button>
+                    </div>
+                </form>
+            </div>
+            
+    
+            <div class="col-sm-6">
+                <h5>Hesaplamalar:</h5>
+                <br>
+                <ul class="list-inline">
+
+                    <li class="list-inline-item">
+                        <div id="userlist"></div>
+                    </li>
+
+                    <li class="list-inline-item">
+                        <div style="margin-left: 2rem;" id="letter"></div>
+                    </li>
+
+                </ul>
+                
+            </div>
+        </div>
+    </div>
+
+
+
+    <br><br><br>
+   
+   
+    
+</body>
+
+
+
+
+<script>
+    
+    console.log("deneme-test");
+
+    let userformDOM = document.querySelector("#userform");
+    userformDOM.addEventListener("submit", kaydet);
+
+    function kaydet(event) {
+        event.preventDefault();
+        const studentName = document.querySelector("#username");
+        const firstGrade = document.querySelector("#grade");
+        const secondGrade = document.querySelector("#grade2");
+        const thirdGrade = document.querySelector("#grade3");
+        let alertDOM = document.querySelector("#alert");
+        let letterDOM = document.querySelector("#letter");
+
+        if((firstGrade.value < 100 && secondGrade.value < 100 && thirdGrade.value < 100)) {
+            console.log("Calisiyor...")
+            addGrade(studentName.value, firstGrade.value, secondGrade.value, thirdGrade.value);
+            if((firstGrade.value + secondGrade.value + thirdGrade.value) / 3 > 50) {
+                letterDOM.innerHTML = `<span class="badge bg-primary rounded-pill">Basarili</span>`;
+            }
+            else {
+                letterDOM.innerHTML = `<span class="badge bg-danger rounded-pill">Basarisiz</span>`;
+            }
+            studentName.value = "";
+            firstGrade.value = "";
+            secondGrade.value = "";
+            thirdGrade.value = "";
+        }
+        else if((firstGrade.value > 100 || secondGrade.value > 100 || thirdGrade.value > 100)) {
+            alertDOM.innerHTML = `
+            <div class="alert alert-warning alert-dismissible fade show" role="alert">
+                <strong>Girilen Bilgiler Yanlıs!</strong> Tekrardan Deneyiniz...
+                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+            </div>`
+            studentName.value = "";
+            firstGrade.value = "";
+            secondGrade.value = "";
+            thirdGrade.value = "";
+        }
+        else if(studentName.value == "" && firstGrade.value == "" && secondGrade.value == "" && thirdGrade.value == "") {
+            alertDOM.innerHTML = `
+            <div class="alert alert-warning alert-dismissible fade show" role="alert">
+                <strong>Girilen Bilgiler Yanlıs!</strong> Tekrardan Deneyiniz...
+                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+            </div>`
+            studentName.value = "";
+            firstGrade.value = "";
+            secondGrade.value = "";
+            thirdGrade.value = "";
+        }
+        else {
+            console.log("Gecersiz...");
+        }
+    }
+
+
+
+    let userlistDOM = document.querySelector("#userlist");
+    function addGrade(user, grd, grd2, grd3, color, color2, color3) {
+        let ulDOM = document.createElement("ul");
+        ulDOM.classList.add("list-group", "list-group-horizontal", "mt-4");
+        let liDOM = document.createElement("li");
+        if(grd<50) {
+            color = "danger";
+        }
+        else if (grd >= 50) {
+            color = "primary"
+        }
+        
+        if(grd2<50) {
+            color2 = "danger";
+        }
+        else {
+            color2 = "primary"
+        }
+
+        if(grd3<50) {
+            color3 = "danger";
+        }
+        else {
+            color3 = "primary"
+        }
+        liDOM.innerHTML += 
+        `
+        ${user} 
+        <span style="margin-left: 1rem;" class="badge bg-${color} rounded-pill">${grd}</span>
+        <span style="margin-left: 1rem;" class="badge bg-${color2} rounded-pill">${grd2}</span> 
+        <span style="margin-left: 1rem;" class="badge bg-${color3} rounded-pill">${grd3}</span>
+        `
+       
+        liDOM.classList.add("list-group-item");
+        ulDOM.append(liDOM);
+        userlistDOM.append(ulDOM);
+    }
+
+</script>
+
+
+
+
+
+
+<!--Bootstrap Bundle-->
+<script 
+    src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" 
+    integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" 
+    crossorigin="anonymous">
+</script>
+
+
+</html>
